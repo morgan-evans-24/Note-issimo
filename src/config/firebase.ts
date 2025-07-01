@@ -6,12 +6,13 @@ import {
 } from "firebase/auth";
 import type { DBEntry } from "../types/DBEntry";
 import type { Note } from "../types/Note";
+import {key} from "./GoogleAPIKey"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAXB1KNMvRqzi0EHeNyTg6-AisO0Jx57nE",
+  apiKey: key,
   authDomain: "notes-app-7e005.firebaseapp.com",
   databaseURL: "https://notes-app-7e005-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "notes-app-7e005",
