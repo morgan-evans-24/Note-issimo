@@ -13,25 +13,28 @@ function App() {
   const [userNotes, setUserNotes] = useState<Note[]>([]);
   const [username, setUsername] = useState<string>("");
   const [userId, setUserId] = useState<number>(-1);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser && auth.currentUser != null) {
-        setUser(currentUser);
-        let currentUserId = await getUserId(currentUser);
-        const notes = await getUserNotes(currentUserId);
-        notes.map((note) => {
-          console.log("note " + note);
-        });
-        setUserId(await getUserId(currentUser));
-        console.log(username + " THIS IS MY USERNAME");
-        setUserNotes(notes);
+      try {
+        if (currentUser && auth.currentUser != null) {
+          setUser(currentUser);
+          const currentUserId = await getUserId(currentUser);
+          setUserId(currentUserId);
+          const notes = await getUserNotes(currentUserId);
+          setUserNotes(notes);
+        }
+      } catch (error) {
+        console.error("Error during auth check:", error);
+      } finally {
+        setLoading(false); // Ensure this runs no matter what
       }
-      setLoading(false);
     });
-    return () => unsubscribe();
-  }, []);
+    return () => {
+      unsubscribe();
+    };
+  }, [loading]);
 
   if (loading) {
     return <div>Loading...</div>;

@@ -1,10 +1,19 @@
 import { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Form, Alert } from "react-bootstrap";
 
 interface Props {
   signingUp: boolean;
-  handleLogin: (email: string, password: string) => void;
-  handleSignup: (email: string, password: string, username: string) => void;
+  handleLogin: (
+    email: string,
+    password: string,
+    setError: (message: string) => void
+  ) => void;
+  handleSignup: (
+    email: string,
+    password: string,
+    username: string,
+    setError: (message: string) => void
+  ) => void;
   show: boolean;
   handleClose: () => void;
 }
@@ -14,89 +23,87 @@ const LoginForm = (props: Props) => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  // or
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <>
-      <Modal show={props.show} onHide={props.handleClose} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <form>
-            <div className="mb-3">
-              <label htmlFor="exampleInputEmail1" className="form-label">
-                Email address
-              </label>
-              <input
-                type="email"
-                value={email}
-                className="form-control"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                onChange={(e) => setEmail(e.target.value)}
+    <Modal show={props.show} onHide={props.handleClose} animation={false}>
+      <Modal.Header closeButton>
+        <Modal.Title>
+          {props.signingUp ? "Signing Up" : "Logging In"}
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Form.Group className="mb-3" controlId="formEmail">
+            <Form.Label>Email address</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Form.Text className="text-muted">
+              We'll never share your email with anyone else.
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <Form.Check
+              type="checkbox"
+              label="Show my password"
+              onClick={() => {
+                setShowPassword(!showPassword);
+              }}
+            />
+          </Form.Group>
+
+          {props.signingUp && (
+            <Form.Group className="mb-3" controlId="formUsername">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Choose a username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
-              <div id="emailHelp" className="form-text">
-                We'll never share your email with anyone else.
-              </div>
-            </div>
+            </Form.Group>
+          )}
 
-            <div className="mb-3">
-              <label htmlFor="exampleInputPassword1" className="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="exampleInputPassword1"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-
-            {props.signingUp ? (
-              <div className="mb-3">
-                <label htmlFor="username" className="form-label">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  value={username}
-                  className="form-control"
-                  id="username"
-                  aria-describedby="usernameHelp"
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </div>
-            ) : null}
-
-            {message && (
-              <div className="alert alert-success mt-3">{message}</div>
-            )}
-            {error && <div className="alert alert-danger mt-3">{error}</div>}
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={props.handleClose}>
-            Close
-          </Button>
-          <Button
-            variant="primary"
-            onClick={() => {
-              props.signingUp
-                ? props.handleSignup(email, password, username)
-                : props.handleLogin(email, password);
-            }}
-          >
-            {props.signingUp ? "Sign Up" : "Log In"}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+          {error && <Alert variant="danger">{error}</Alert>}
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            setError("");
+            props.handleClose();
+          }}
+        >
+          Close
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() => {
+            props.signingUp
+              ? props.handleSignup(email, password, username, setError)
+              : props.handleLogin(email, password, setError);
+          }}
+        >
+          {props.signingUp ? "Sign Up" : "Log In"}
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
