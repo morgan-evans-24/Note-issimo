@@ -84,6 +84,14 @@ const NotesPage = (props: Props) => {
     saveChanges(updatedNotes);
   }
 
+  function convertDate(timeStampAsString: string): string {
+    console.log("as string " + timeStampAsString);
+    const timeStamp = parseInt(timeStampAsString);
+    console.log("as number " + timeStamp);
+    const date = new Date(timeStamp);
+    return date.toDateString();
+  }
+
   return (
     <>
       <div className="layout-container">
@@ -122,6 +130,9 @@ const NotesPage = (props: Props) => {
                 >
                   <HiOutlineTrash></HiOutlineTrash>
                 </Button>
+                <p className="date-text">
+                  Created {convertDate(note.dateCreated)}
+                </p>
               </li>
             ))}
             <li>

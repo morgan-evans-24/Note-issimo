@@ -31,6 +31,11 @@
     z-index: 1;
 }
 
+.date-text {
+    color: #69797d;
+    margin: 10px 0px 0px 0px;
+}
+
 .current-note{
     display: flex;
     position: relative;
