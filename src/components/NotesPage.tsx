@@ -27,17 +27,21 @@ const NotesPage = (props: Props) => {
 
   function addNote() {
     const newNote: Note = {
-      header: "New note",
+      header: "",
       content: "",
       dateCreated: Date.now().toString(),
     };
+    const notesLength = notes.length;
     setNotes([...notes, newNote]);
+    setSelectedNoteIndex(notesLength);
+    setCurrentNote(newNote);
+    setIsEditing(true);
   }
 
-  function saveChanges() {
-    console.log(notes);
+  function saveChanges(newNotes: Note[]) {
+    console.log(newNotes);
     console.log(props.userId);
-    setUserNotes(notes, props.userId);
+    setUserNotes(newNotes, props.userId);
   }
 
   function logOut() {
@@ -57,13 +61,27 @@ const NotesPage = (props: Props) => {
 
   function autoSave() {
     if (notesChanged) {
-      saveChanges();
+      saveChanges(notes);
       setNotesChanged(false);
     }
   }
 
-  function deleteNote() {
-    // TODO Finish this function, style button
+  function handleDeleteClick(event: React.MouseEvent, indexToDelete: number) {
+    event.stopPropagation();
+    console.log("index = " + indexToDelete);
+    if (indexToDelete < 0 || indexToDelete > notes.length - 1) {
+      return;
+    }
+    if (indexToDelete === selectedNoteIndex) {
+      setSelectedNoteIndex(-1);
+      setCurrentNote(undefined);
+    }
+    if (indexToDelete < selectedNoteIndex) {
+      setSelectedNoteIndex(selectedNoteIndex - 1);
+    }
+    const updatedNotes = notes.filter((_, index) => index !== indexToDelete);
+    setNotes(updatedNotes);
+    saveChanges(updatedNotes);
   }
 
   return (
@@ -71,32 +89,44 @@ const NotesPage = (props: Props) => {
       <div className="layout-container">
         <div className="sidebar">
           <ul className="list-group list-group-flush">
+            {notes.length <= 0 ? (
+              <li>
+                <p className="no-notes-text">
+                  You don't have any notes at the moment, click the "plus" below
+                  to get started!
+                </p>
+              </li>
+            ) : null}
             {notes.map((note, index) => (
-              <>
-                <li
-                  onClick={() => {
-                    setSelectedNoteIndex(index);
-                    setCurrentNote(note);
-                    setIsEditing(false);
+              <li
+                onClick={() => {
+                  setSelectedNoteIndex(index);
+                  setCurrentNote(note);
+                  setIsEditing(false);
+                }}
+                key={index}
+                className={
+                  selectedNoteIndex === index
+                    ? "list-group-item active list-note-item"
+                    : "list-group-item list-note-item"
+                }
+              >
+                {note.header || "<Unnamed Note>"}
+                <Button
+                  onClick={(e: React.MouseEvent) => {
+                    handleDeleteClick(e, index);
                   }}
-                  key={index}
-                  className={
-                    selectedNoteIndex === index
-                      ? "list-group-item active"
-                      : "list-group-item"
-                  }
+                  className="delete-button"
+                  variant="outline-info"
+                  size="sm"
                 >
-                  {note.header || "<Unnamed Note>"}
-                </li>
-                <HiOutlineTrash
-                  onClick={() => {
-                    deleteNote();
-                  }}
-                ></HiOutlineTrash>
-              </>
+                  <HiOutlineTrash></HiOutlineTrash>
+                </Button>
+              </li>
             ))}
             <li>
               <Button
+                variant="outline-info"
                 type="button"
                 onClick={() => addNote()}
                 className="add-note-button"
@@ -105,14 +135,18 @@ const NotesPage = (props: Props) => {
               </Button>
             </li>
           </ul>
-          <Button onClick={() => logOut()} className="logout-button">
+          <Button
+            variant="outline-info"
+            onClick={() => logOut()}
+            className="logout-button"
+          >
             Log Out
           </Button>
         </div>
         <div className="current-note">
           {selectedNoteIndex === -1 ? (
             <>
-              <h1>
+              <h1 className="no-note-heading">
                 {
                   <TypeWriter
                     onInit={(typewriter) => {
@@ -156,6 +190,7 @@ const NotesPage = (props: Props) => {
                 />
               </div>
               <Button
+                variant="outline-info"
                 className="edit-read-button"
                 onClick={() => {
                   setIsEditing(!isEditing);

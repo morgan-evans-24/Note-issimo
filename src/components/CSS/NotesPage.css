@@ -1,3 +1,36 @@
+.layout-container {
+    background-color: #19181f;
+}
+
+.list-note-item {
+    position: relative;
+    background-color: #272530;
+    color: aliceblue;
+}
+
+.no-notes-text {
+    margin: 0px;
+    margin-top: 5px;
+    text-align: center;
+    color: #69797d;
+}
+
+.active {
+    background-color: #28204d !important;
+}
+
+.delete-button {
+    position: absolute;
+    right: 0;
+    margin: 0px 5px 0px 0px;
+    padding: 0px 5px 2px 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 5px;
+    font-size: 20px;
+    z-index: 1;
+}
+
 .current-note{
     display: flex;
     position: relative;
@@ -10,8 +43,12 @@
     font-size: larger;
     font-weight: bold;
     background-color: transparent;
-    color: black;
+    color: aliceblue;
     border-style: none;
+}
+
+.no-note-heading {
+    color: aliceblue;
 }
 
 .header-style {
@@ -35,7 +72,7 @@
     border-top-style: none;
     border-style: none;
     background-color: transparent;
-    color: black;
+    color: aliceblue;
 }
 
 textarea.content:focus {
@@ -69,6 +106,6 @@ input.header:focus {
 .add-note-button {
     font-size: x-large;
     padding: 0px 10px 0px 10px;
-    margin: 0px;
-    border-radius: 0px;
+    margin: 5px;
+    border-radius: 5px;
 }
