@@ -1,69 +1,16 @@
-# React + TypeScript + Vite
+# Note-issimo
+Note-issimo is a simple markdown note-taking app built using React and Bootstrap. This app was never hosted anywhere, but was just a small project to help me build my skills with React.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Login
+The login for the app is simple enough, just a basic sign-up/log-in method, with authentication handles by firebase.
 
-Currently, two official plugins are available:
+![Login screen](https://github.com/user-attachments/assets/fd9fcc85-3b47-47f0-9a4b-c8e0ef421522)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Notes Screen
+The main screen of the app, notes are created and managed on the left hand side, and edited on the left. Notes headers can be changed in the right hand panel, as well as their content. The note editing panel has two modes: **Edit Mode** which allows the users to write to the content of the note in markdown, and **Read Mode**, which displays the rendered markdown text.
 
-## Expanding the ESLint configuration
+![Notes screen](https://github.com/user-attachments/assets/356a9065-f970-4789-abf3-3a64255e91c3)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Going Forward
+Were I to continue working on this project, I would make the app compatible with mobile devices, as well as allow input for other languages such as LaTeX.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
